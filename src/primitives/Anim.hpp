@@ -14,7 +14,7 @@
 //  File    : Anim.hpp
 //  Author  : Anthony Islas
 //  Purpose : Animation graphics for wrapper graphics library to use NCurses
-//  Group   : Graphics
+//  Group   : Primitives
 //
 //  TODO    : None
 //
@@ -22,8 +22,8 @@
 //
 ////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __GRAPHICS_ANIM_H__
-#define __GRAPHICS_ANIM_H__
+#ifndef __PRIMITIVES_ANIM_HPP__
+#define __PRIMITIVES_ANIM_HPP__
 
 namespace graphics
 {
@@ -56,4 +56,4 @@ private:
 
 }
 
-#endif // __GRAPHICS_ANIM_H__
+#endif // __PRIMITIVES_ANIM_HPP__

@@ -14,7 +14,7 @@
 //  File    : Anim.cpp
 //  Author  : Anthony Islas
 //  Purpose : Animation graphics for wrapper graphics library to use NCurses
-//  Group   : Graphics
+//  Group   : Primitives
 //
 //  TODO    : None
 //
