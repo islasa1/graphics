@@ -173,7 +173,7 @@ target_include_directories (
 #
 ####################################################################################
 message ( "Configuring ${PROJECT_NAME}")
-# add_subdirectory ( src )
+add_subdirectory ( src )
 
 
 

@@ -11,9 +11,9 @@
 //////////////////////////////////////////////////////////////////////////////////////
 ///
 ///
-///  \File    : GraphicsContext.hpp
+///  \File    : Uniform.hpp
 ///  \Author  : Anthony Islas
-///  \Purpose : It is the core of the graphics
+///  \Purpose : Localize uniform values
 ///  \Group   : Core
 ///
 ///  \todo    : None
@@ -22,28 +22,66 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __CORE_GRAPHICSCONTEXT_H__
-#define __CORE_GRAPHICSCONTEXT_H__
-
-namespace graphics 
+namespace graphics
 {
 
 namespace core
 {
   
-
-class GraphicsContext
+template< typename U >
+class Uniform
 {
-
 public:
 
-  GraphicsContext();
-  ~GraphicsContext();
+  enum UniformType
+  {
+
+    INT,
+    UINT,
+    FLOAT,
+    TEX1D,
+    TEX2D,
+    TEX3D,
+    MATRIX
+
+  };
+
+  template< typename U >
+  Uniform(
+          U           value
+          UniformType uniform,
+          std::string location = "",
+          size_t      size     = 1,
+          size_t      rows      = 0,      // Specific to MATRIX
+          size_t      cols      = 0       // Specific to MATRIX
+          );
+
+  ~Uniform();
+
+  virtual void setUniform();
   
+  U           uniform( )           { return uniform_; }
+  void        uniform( const U &u) { uniform_ = u;     }
+
+  UniformType uniformType() { return uniformType_; }
+  std::string location()    { return location_;    } 
+  size_t      size()        { return size_;        }
+
+  size_t      rows()        { return rows_;        }
+  size_t      cols()        { return cols_;        }
+  
+  U           operator=( const U &u ) { uniform_ = u; return uniform_; }
 
 private:
 
-  
+  U           uniform_;
+
+  UniformType uniformType_;
+  std::string location_;
+  size_t      size_;
+
+  size_t      rows_;
+  size_t      cols_;
 
 };
 
@@ -51,5 +89,3 @@ private:
 } // namespace core
 
 } // namespace graphics
-
-#endif // __CORE_GRAPHICSCONTEXT_H__

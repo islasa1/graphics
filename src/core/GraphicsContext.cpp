@@ -11,7 +11,7 @@
 //////////////////////////////////////////////////////////////////////////////////////
 ///
 ///
-///  \File    : GraphicsContext.hpp
+///  \File    : GraphicsContext.cpp
 ///  \Author  : Anthony Islas
 ///  \Purpose : It is the core of the graphics
 ///  \Group   : Core
@@ -22,34 +22,38 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __CORE_GRAPHICSCONTEXT_H__
-#define __CORE_GRAPHICSCONTEXT_H__
+#include "GraphicsContext.hpp"
 
-namespace graphics 
+namespace graphics
 {
 
 namespace core
 {
   
-
-class GraphicsContext
+///**********************************************************************************
+///
+///  \function GraphicsContext::GraphicsContext
+///
+///  \brief    ctor
+///
+///**********************************************************************************
+GraphicsContext::GraphicsContext( )
 {
+} // GraphicsContext::GraphicsContext
 
-public:
 
-  GraphicsContext();
-  ~GraphicsContext();
-  
-
-private:
-
-  
-
-};
+///**********************************************************************************
+///
+///  \function GraphicsContext::GraphicsContext
+///
+///  \brief    dtor
+///
+///**********************************************************************************
+GraphicsContext::~GraphicsContext( )
+{
+} // GraphicsContext::GraphicsContext
 
 
 } // namespace core
 
 } // namespace graphics
-
-#endif // __CORE_GRAPHICSCONTEXT_H__

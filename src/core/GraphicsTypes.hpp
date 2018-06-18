@@ -11,9 +11,9 @@
 //////////////////////////////////////////////////////////////////////////////////////
 ///
 ///
-///  \File    : GraphicsContext.hpp
+///  \File    : GraphicsTypes.hpp
 ///  \Author  : Anthony Islas
-///  \Purpose : It is the core of the graphics
+///  \Purpose : Basic graphisc types named
 ///  \Group   : Core
 ///
 ///  \todo    : None
@@ -22,34 +22,13 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __CORE_GRAPHICSCONTEXT_H__
-#define __CORE_GRAPHICSCONTEXT_H__
-
-namespace graphics 
+namespace graphics
 {
 
 namespace core
 {
   
 
-class GraphicsContext
-{
-
-public:
-
-  GraphicsContext();
-  ~GraphicsContext();
-  
-
-private:
-
-  
-
-};
-
-
 } // namespace core
 
 } // namespace graphics
-
-#endif // __CORE_GRAPHICSCONTEXT_H__
