@@ -50,7 +50,7 @@ public:
   Uniform(
           U           value
           UniformType uniform,
-          std::string location = "",
+          std::string location,
           size_t      size     = 1,
           size_t      rows      = 0,      // Specific to MATRIX
           size_t      cols      = 0       // Specific to MATRIX
@@ -60,8 +60,6 @@ public:
 
   virtual void setUniform();
   
-  U           uniform( )           { return uniform_; }
-  void        uniform( const U &u) { uniform_ = u;     }
 
   UniformType uniformType() { return uniformType_; }
   std::string location()    { return location_;    } 
@@ -70,7 +68,8 @@ public:
   size_t      rows()        { return rows_;        }
   size_t      cols()        { return cols_;        }
   
-  U           operator=( const U &u ) { uniform_ = u; return uniform_; }
+  U           getValue()                { return uniform_;  }
+  U           operator=  ( const U &u ) { uniform_ = u; return uniform_; }
 
 private:
 

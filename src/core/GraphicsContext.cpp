@@ -24,6 +24,15 @@
 
 #include "GraphicsContext.hpp"
 
+// std
+#include <iostream>
+
+// gl
+#include <glm/glm.hpp>
+
+// thirdparty
+#include "GLFW/glfw3.h"
+
 namespace graphics
 {
 
@@ -37,8 +46,31 @@ namespace core
 ///  \brief    ctor
 ///
 ///**********************************************************************************
-GraphicsContext::GraphicsContext( )
+GraphicsContext::GraphicsContext( 
+                                  std::string windowName
+                                  )
 {
+
+  // glfwWindowHint( GLFW_SAMPLES, 4 ); // 4x antialiasing
+  // glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 ); // We want OpenGL 3.3
+  // glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3 );
+  glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE ); // To make MacOS happy; should not be needed
+  glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE ); // We don't want the old OpenGL 
+  
+  // Open a window and create its OpenGL context
+  GLFWwindow* window; 
+  window = glfwCreateWindow( 1024, 768, windowName.c_str(), NULL, NULL);
+  if( window == NULL )
+  {
+      std::cerr << "Failed to open GLFW window." << std::endl 
+                << "  If you have an Intel GPU, they are not 3.3 compatible." << std::endl 
+                << "  Try the 2.1 version of the tutorials." << std::endl;
+      glfwTerminate();
+      return;
+  }
+
+  glfwMakeContextCurrent( window ); // Initialize GLEW
+  
 } // GraphicsContext::GraphicsContext
 
 

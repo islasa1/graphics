@@ -24,6 +24,7 @@
 # Dependencies
 #
 cmake_minimum_required ( VERSION 3.5.0 )
+project ( KomorebiGraphics )
 
 set ( CMAKE_BUILD_TYPE debug )
 
@@ -57,8 +58,11 @@ list( APPEND
       ${COMPONENTS}/cmake 
       )
 
+set( GLFW_GRAPHICS ON )
+
 include( ExternalProject )
 include( GoogleTestSetup )
+include( GLFWSetup       )
 include( OptionPrinter   )
 include( VersionExtract  )
 
@@ -68,11 +72,6 @@ include( VersionExtract  )
 #
 ####################################################################################
 version_extract_str( ${CMAKE_CURRENT_SOURCE_DIR}/versions.txt PROJECT_VERSION )
-project ( 
-          KomorebiGraphics 
-          VERSION 
-          ${PROJECT_VERSION}
-          )
 
 message ( "Configuring " ${PROJECT_NAME} )
 detailed_print( "PROJECT VERSION" CLR_MAGENTA ${PROJECT_VERSION} CLR_CYAN 14 LEFT )
@@ -80,7 +79,7 @@ detailed_print( "PROJECT VERSION" CLR_MAGENTA ${PROJECT_VERSION} CLR_CYAN 14 LEF
 #
 # Flags
 #
-set( CMAKE_CXX_FLAGS "-std=c++11 -Wall" )
+set( CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wextra" )
 
 #
 # Debug flags
@@ -108,11 +107,10 @@ set( LIBRARY_INSTALL ${PROJECT_SOURCE_DIR}/lib )
 set        (   TARGET ${PROJECT_NAME}  )
 add_library( ${TARGET} SHARED ""       )
 
-
 target_include_directories ( 
                             ${TARGET}
                             PUBLIC
-                              ${PROJECT_BINARY_DIR} 
+                              ${PROJECT_BINARY_DIR}
                               )
 
 
@@ -151,6 +149,12 @@ set ( TEST_RESOURCES
 find_package ( Threads )
 find_package ( OpenGL  )
 
+#
+# Depend on thirdparty target ( added by setup module )
+#
+add_dependencies( ${TARGET} glfw )
+
+
 find_library( COMPONENTS_TIMING KomorebiComponentsTiming ${COMPONENTS}/lib )
 find_library( COMPONENTS_STRING KomorebiComponentsString ${COMPONENTS}/lib )
 
@@ -164,6 +168,7 @@ target_include_directories (
                             PUBLIC
                               ${OPEN_GL_INCLUDE_DIRS} 
                               ${COMPONENTS}
+                              ${GLFW_ROOT}/include
                               )
 
 
@@ -203,6 +208,7 @@ endif()
 target_link_libraries( ${TARGET}
                        ${OPENGL_LIBRARIES}
                        ${COMPONENTS_LIBRARIES}
+                       ${GLFW_LIBS}
                        )
 
 

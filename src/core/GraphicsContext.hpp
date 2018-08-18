@@ -25,6 +25,8 @@
 #ifndef __CORE_GRAPHICSCONTEXT_H__
 #define __CORE_GRAPHICSCONTEXT_H__
 
+#include <string>
+
 namespace graphics 
 {
 
@@ -37,7 +39,9 @@ class GraphicsContext
 
 public:
 
-  GraphicsContext();
+  GraphicsContext( 
+                  std::string windowName = "" 
+                  );
   ~GraphicsContext();
   
 
