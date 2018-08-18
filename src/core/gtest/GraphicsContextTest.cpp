@@ -11,10 +11,10 @@
 //////////////////////////////////////////////////////////////////////////////////////
 ///
 ///
-///  \File    : GraphicsContext.hpp
+///  \File    : GraphicsContextTest.cpp
 ///  \Author  : Anthony Islas
-///  \Purpose : It is the core of the graphics
-///  \Group   : Core
+///  \Purpose : Test for GraphicsContext
+///  \Group   : Gtest
 ///
 ///  \todo    : None
 ///
@@ -22,41 +22,70 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////
 
-#ifndef __CORE_GRAPHICSCONTEXT_H__
-#define __CORE_GRAPHICSCONTEXT_H__
+#include "gtest/gtest.h"
 
-#include <string>
+#include "core/GraphicsContext.hpp"
 
-struct GLFWwindow;
-
-namespace graphics 
-{
-
-namespace core
+namespace gtest
 {
   
 
-class GraphicsContext
+class TEST_CASE : public ::testing::Test
 {
 
 public:
+  TEST_CASE() {}
+  ~TEST_CASE(){}
 
-  GraphicsContext( 
-                  std::string windowName = "" 
-                  );
-  ~GraphicsContext();
-  
-  bool contextCloseRequested();
+  virtual 
+  void 
+  SetUp()
+  {
+
+
+  }
+
+  virtual 
+  void
+  TearDown()
+  {
+
+    if ( pContext_ )
+    {
+      delete pContext_;
+    }
+
+  }
+
+  void
+  SetupContext( std::string windowName = "" )
+  {
+    pContext_ = new graphics::core::GraphicsContext( windowName );
+  }
 
 private:
 
-  GLFWwindow *window_;
-
+  graphics::core::GraphicsContext *pContext_;
+  
 };
 
 
-} // namespace core
 
-} // namespace graphics
+TEST_F( TEST_CASE, OpenWindowNoTitle )
+{
 
-#endif // __CORE_GRAPHICSCONTEXT_H__
+  SetupContext( );
+
+}
+
+
+
+TEST_F( TEST_CASE, OpenWindowTitle )
+{
+
+  SetupContext( "FooBar" );
+
+}
+
+
+} // namespace gtest

@@ -13,67 +13,40 @@
 ##
 ##  File    : CMakeLists.txt
 ##  Author  : Anthony Islas
-##  Purpose : Core graphis implementations
-##  Group   : Core
+##  Purpose : Set up tests
+##  Group   : Components
 ##
 ##  TODO    : None
 ##
-##  License : GNU GPL v3
+##  License : None
 ##
 ####################################################################################
 
 
-#
-# Includes
-#
-target_include_directories( ${TARGET} 
-                            PUBLIC
-                              ${CMAKE_CURRENT_SOURCE_DIR}
-                              ${PROJECT_SOURCE_DIR}
-                            )
-
-#
-# Sources
-#
-target_sources( ${TARGET}
-                PRIVATE 
-                  ${CMAKE_CURRENT_SOURCE_DIR}/GraphicsContext.cpp
-              )
-
-
 ####################################################################################
 #
-# UNIT TESTS
+# Pass up
 #
 ####################################################################################
-if ( UNIT_TEST )
+set (   TEST_SOURCES  
+      ${TEST_SOURCES}  
+      # Put test sources here
+        ${CMAKE_CURRENT_SOURCE_DIR}/GraphicsContextTest.cpp
 
-  if ( NOT EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/gtest )
-
-    message( STATUS "No tests to build for ${TARGET}" )
-
-    return()
-
-  else()
-
-  add_subdirectory( ${CMAKE_CURRENT_SOURCE_DIR}/gtest )  
-  set (   
-        TEST_SOURCES  
-        ${TEST_SOURCES}  
         PARENT_SCOPE 
-        )
+      )
 
-  set ( 
-        TEST_INCLUDES 
-        ${TEST_INCLUDES} 
+set (   TEST_INCLUDES 
+      ${TEST_INCLUDES} 
+      # Put any specific includes here
+      ${PROJECT_SOURCE_DIR}/src
+
         PARENT_SCOPE 
-        )
+    )
 
-  set ( RESOURCE_FILES
-        ${RESOURCE_FILES}
-        PARENT_SCOPE
-        )
+set ( RESOURCE_FILES
+      ${RESOURCE_FILES}
+      # Put any specific resource files required by tests here
 
-  endif()
-
-endif()
+      PARENT_SCOPE
+      )

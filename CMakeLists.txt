@@ -154,7 +154,6 @@ find_package ( OpenGL  )
 #
 add_dependencies( ${TARGET} glfw )
 
-
 find_library( COMPONENTS_TIMING KomorebiComponentsTiming ${COMPONENTS}/lib )
 find_library( COMPONENTS_STRING KomorebiComponentsString ${COMPONENTS}/lib )
 
@@ -196,8 +195,33 @@ if ( UNIT_TEST )
 
   message ( "Resources located in : '${TEST_RESOURCES}'" )
 
-endif()
+  # Builds all tests
+  create_gtest( 
+                TARGET 
+                  ${TARGET}Tests
 
+                INSTALL
+                  ${RUNTIME_INSTALL}
+
+                SOURCES
+                  ${TEST_SOURCES}
+
+                INSTALL_RPATH
+                  ${LIBRARY_INSTALL}
+
+                LIBS
+                  ${TARGET}
+
+                INCLUDES
+                  ${TEST_INCLUDES}
+
+                RESOURCES
+                  ${RESOURCE_FILES}
+
+                # PRINT_INC_DIR # Including this makes it true
+                )
+
+endif()
 
 
 ####################################################################################
@@ -220,12 +244,18 @@ target_link_libraries( ${TARGET}
 #
 # RPATH
 #
+set( 
+    TARGET_RPATH
+    ${COMPONENTS}/lib
+    ${GLFW_ROOT}/lib
+    )
+
 set_target_properties( ${TARGET}
                        PROPERTIES
                          INSTALL_RPATH 
-                         ${COMPONENTS}/lib
-                         ${OPENGL_LIBRARIES}/lib 
+                         "${TARGET_RPATH}"
                          )
+
 
 install( TARGETS ${TARGET} 
          RUNTIME DESTINATION ${RUNTIME_INSTALL}

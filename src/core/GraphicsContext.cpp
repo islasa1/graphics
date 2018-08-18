@@ -26,12 +26,14 @@
 
 // std
 #include <iostream>
+#include <cstdlib>
 
 // gl
 #include <glm/glm.hpp>
 
 // thirdparty
 #include "GLFW/glfw3.h"
+
 
 namespace graphics
 {
@@ -51,16 +53,18 @@ GraphicsContext::GraphicsContext(
                                   )
 {
 
-  // glfwWindowHint( GLFW_SAMPLES, 4 ); // 4x antialiasing
-  // glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 3 ); // We want OpenGL 3.3
-  // glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 3 );
-  glfwWindowHint( GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE ); // To make MacOS happy; should not be needed
-  glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE ); // We don't want the old OpenGL 
+  if ( !glfwInit() )
+  {
+      std::cerr << "Failed to initialize GLFW" << std::endl;
+      exit( EXIT_FAILURE );
+  }
+
+  glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE ); // We just want to run OpenGL 
   
   // Open a window and create its OpenGL context
-  GLFWwindow* window; 
-  window = glfwCreateWindow( 1024, 768, windowName.c_str(), NULL, NULL);
-  if( window == NULL )
+  
+  window_ = glfwCreateWindow( 1024, 768, windowName.c_str(), NULL, NULL);
+  if( window_ == NULL )
   {
       std::cerr << "Failed to open GLFW window." << std::endl 
                 << "  If you have an Intel GPU, they are not 3.3 compatible." << std::endl 
@@ -69,7 +73,7 @@ GraphicsContext::GraphicsContext(
       return;
   }
 
-  glfwMakeContextCurrent( window ); // Initialize GLEW
+  glfwMakeContextCurrent( window_ ); // Initialize GLFW
   
 } // GraphicsContext::GraphicsContext
 
@@ -83,7 +87,30 @@ GraphicsContext::GraphicsContext(
 ///**********************************************************************************
 GraphicsContext::~GraphicsContext( )
 {
+
+  glfwDestroyWindow( window_ );
+  glfwTerminate();
+
 } // GraphicsContext::GraphicsContext
+
+
+///**********************************************************************************
+///
+///  \function GraphicsContext::contextCloseRequested
+///
+///  \brief    Returns if a request to close the window has been made
+///
+///  \return   bool - true if window close is requested
+///
+///**********************************************************************************
+bool 
+GraphicsContext::contextCloseRequested()
+{
+  
+  return glfwWindowShouldClose( window_ );
+
+} // GraphicsContext::contextCloseRequested
+
 
 
 } // namespace core

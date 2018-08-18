@@ -27,3 +27,29 @@ add_subdirectory ( core )
 # add_subdirectory ( primitives )
 # add_subdirectory ( widgets )
 
+
+####################################################################################
+#
+# UNIT TESTS
+#
+####################################################################################
+if ( UNIT_TEST )
+
+  set (   
+        TEST_SOURCES  
+        ${TEST_SOURCES}  
+        PARENT_SCOPE 
+        )
+
+  set ( 
+        TEST_INCLUDES 
+        ${TEST_INCLUDES} 
+        PARENT_SCOPE 
+        )
+
+  set ( RESOURCE_FILES
+        ${RESOURCE_FILES}
+        PARENT_SCOPE
+        )
+
+endif()
