@@ -10,3 +10,7 @@ curses graphics ( ASCII art [insert link here] ), but ideally the project
 should be extensible to other forms of graphics.
 
 
+## Requirements
+
+OpenGL 4.5
+OpenGL math library (glm)

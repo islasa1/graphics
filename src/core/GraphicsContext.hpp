@@ -42,15 +42,30 @@ class GraphicsContext
 public:
 
   GraphicsContext( 
-                  std::string windowName = "" 
+                  std::string windowName = "",
+                  size_t      width      = 1024,
+                  size_t      height     = 720
                   );
   ~GraphicsContext();
   
   bool contextCloseRequested();
 
+  size_t getWindowWidth()  { return width_;  }
+  size_t getWindowHeight() { return height_; }
+
+  //
+  // Graphics abstraction layer
+  //
+  static void genVertexBuffer ( size_t n, uint32_t *pVao );
+  static void bindVertexBuffer( uint32_t vao );
+
 private:
 
-  GLFWwindow *window_;
+  GLFWwindow   *window_;
+
+  std::string   windowName_;
+  size_t        width_;
+  size_t        height_;
 
 };
 

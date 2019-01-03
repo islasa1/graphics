@@ -26,6 +26,15 @@
 
 #include "core/GraphicsContext.hpp"
 
+// 
+// Direct access to things we test
+
+// gl
+#include <glm/glm.hpp>
+
+// thirdparty
+#include "GLFW/glfw3.h"
+
 namespace gtest
 {
   
@@ -86,6 +95,21 @@ TEST_F( TEST_CASE, OpenWindowTitle )
   SetupContext( "FooBar" );
 
 }
+
+
+
+TEST_F( TEST_CASE, DisplayOnWindowTriangle )
+{
+  // Based on :
+  // http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/
+  SetupContext( );
+
+  GLuint vao;
+
+  graphics::core::GraphicsContext::genVertexBuffer( 1, &vao );
+
+}
+
 
 
 } // namespace gtest

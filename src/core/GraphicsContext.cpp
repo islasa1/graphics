@@ -27,11 +27,16 @@
 // std
 #include <iostream>
 #include <cstdlib>
+#include <stdexcept>
 
 // gl
 #include <glm/glm.hpp>
+// #include <GL/gl.h>
 
 // thirdparty
+// Gets OpenGL 3.1+ extensions
+#include "glad/glad.h"
+#define GLFW_INCLUDE_GLEXT 
 #include "GLFW/glfw3.h"
 
 
@@ -49,21 +54,32 @@ namespace core
 ///
 ///**********************************************************************************
 GraphicsContext::GraphicsContext( 
-                                  std::string windowName
+                                  std::string windowName,
+                                  size_t      width,
+                                  size_t      height
                                   )
+: windowName_( windowName  )
+, width_     ( width       )
+, height_    ( height      )
 {
+
 
   if ( !glfwInit() )
   {
       std::cerr << "Failed to initialize GLFW" << std::endl;
-      exit( EXIT_FAILURE );
+      throw std::runtime_error( "" );
   }
 
-  glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_ANY_PROFILE ); // We just want to run OpenGL 
+  // We want OpenGL 3.3
+  glfwWindowHint( GLFW_CONTEXT_VERSION_MAJOR, 4 ); 
+  glfwWindowHint( GLFW_CONTEXT_VERSION_MINOR, 5 );
+
+  glfwWindowHint( GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE ); // We just want to run OpenGL 
   
   // Open a window and create its OpenGL context
   
-  window_ = glfwCreateWindow( 1024, 768, windowName.c_str(), NULL, NULL);
+  window_ = glfwCreateWindow( width_, height_, windowName_.c_str(), NULL, NULL);
+  
   if( window_ == NULL )
   {
       std::cerr << "Failed to open GLFW window." << std::endl 
@@ -74,6 +90,18 @@ GraphicsContext::GraphicsContext(
   }
 
   glfwMakeContextCurrent( window_ ); // Initialize GLFW
+
+  // Load extensions - we need a valid context before
+  // we can do this
+  gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
+
+  if ( !glfwExtensionSupported( "GL_ARB_debug_output" ) )
+  {
+    // The extension is not supported by the current context
+    std::cerr << "Unsupported OpenGL extensions" << std::endl;
+    throw std::runtime_error( "" );
+
+  }
   
 } // GraphicsContext::GraphicsContext
 
@@ -111,6 +139,50 @@ GraphicsContext::contextCloseRequested()
 
 } // GraphicsContext::contextCloseRequested
 
+
+
+///**********************************************************************************
+///
+///  \function GraphicsContext::genVertexBuffer
+///
+///  \brief    Brief Description
+///
+///  \return   void - 
+///
+///**********************************************************************************
+void 
+GraphicsContext::genVertexBuffer( 
+                                  size_t    n, 
+                                  uint32_t *pVao 
+                                  )
+{
+  
+  glGenVertexArrays( n, static_cast< GLuint * >( pVao ) );
+
+  bindVertexBuffer( *pVao );
+
+} // GraphicsContext::genVertexBuffer
+
+
+
+///**********************************************************************************
+///
+///  \function GraphicsContext::bindVertexBuffer
+///
+///  \brief    Brief Description
+///
+///  \return   void - 
+///
+///**********************************************************************************
+void
+GraphicsContext::bindVertexBuffer( 
+                                  uint32_t vao 
+                                  )
+{
+  
+  glBindVertexArray( static_cast< GLuint >( vao ) );
+
+} // GraphicsContext::bindVertexBuffer
 
 
 } // namespace core

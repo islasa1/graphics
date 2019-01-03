@@ -22,6 +22,10 @@
 ///
 ////////////////////////////////////////////////////////////////////////////////////
 
+#ifndef __CORE_TEXTURE_H__
+#define __CORE_TEXTURE_H__
+
+
 #include <GL/gl.h>
 
 namespace graphics
@@ -93,3 +97,5 @@ private:
 } // namespace core
 
 } // namespace graphics
+
+#endif // __CORE_TEXTURE_H__

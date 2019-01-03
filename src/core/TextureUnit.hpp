@@ -31,7 +31,7 @@ namespace core
 {
 
 // type of texture
-class TextureUnit : public Uniform
+class TextureUnit : public Uniform< GLuint >
 {
 
 public:
@@ -75,7 +75,8 @@ public:
 
   GLuint texture() { return texture_; }
 
-  virtual void setUniform();
+  virtual
+  void*       getAddress()
 
 private:
 

@@ -154,6 +154,12 @@ find_package ( OpenGL  )
 #
 add_dependencies( ${TARGET} glfw )
 
+# Additional config for glfw / OpenGL extension support
+target_sources( ${TARGET}
+                PUBLIC
+                  ${GLFW_DEPS}
+              )
+
 find_library( COMPONENTS_TIMING KomorebiComponentsTiming ${COMPONENTS}/lib )
 find_library( COMPONENTS_STRING KomorebiComponentsString ${COMPONENTS}/lib )
 
@@ -168,6 +174,7 @@ target_include_directories (
                               ${OPEN_GL_INCLUDE_DIRS} 
                               ${COMPONENTS}
                               ${GLFW_ROOT}/include
+                              ${GLFW_ROOT}/deps
                               )
 
 
