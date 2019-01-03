@@ -143,6 +143,114 @@ GraphicsContext::contextCloseRequested()
 
 ///**********************************************************************************
 ///
+///  \function GraphicsContext::makeWindowCurrent
+///
+///  \brief    I think this is maybe how we should swap buffers (?)
+///
+///  \return   void - just updates the window
+///
+///**********************************************************************************
+void 
+GraphicsContext::makeWindowCurrent( )
+{
+
+  glfwSwapBuffers( window_ );
+
+} // GraphicsContext::makeWindowCurrent
+
+
+///**********************************************************************************
+///
+///  \function GraphicsContext::genVertexArray
+///
+///  \brief    Brief Description
+///
+///  \return   void - 
+///
+///**********************************************************************************
+void 
+GraphicsContext::genVertexArray( 
+                                size_t    n, 
+                                uint32_t *pVao 
+                                )
+{
+  
+  glGenVertexArrays( n, static_cast< GLuint * >( pVao ) );
+
+  bindVertexArray( *pVao );
+
+} // GraphicsContext::genVertexArray
+
+
+
+///**********************************************************************************
+///
+///  \function GraphicsContext::bindVertexArray
+///
+///  \brief    Brief Description
+///
+///  \return   void - 
+///
+///**********************************************************************************
+void
+GraphicsContext::bindVertexArray( 
+                                  uint32_t vao 
+                                  )
+{
+  
+  glBindVertexArray( static_cast< GLuint >( vao ) );
+
+} // GraphicsContext::bindVertexArray
+
+
+
+
+
+void 
+GraphicsContext::enableVertexArrayAttrib ( 
+                                          uint32_t index 
+                                          )
+{
+  
+  glEnableVertexAttribArray( index );
+
+}
+
+// void 
+// GraphicsContext::enableVertexArrayAttrib ( 
+//                                           uint32_t vao, 
+//                                           uint32_t index 
+//                                           )
+// {
+  
+//   glEnableVertexArrayAttrib( vao, index );
+
+// }
+
+void 
+GraphicsContext::disableVertexArrayAttrib( 
+                                          uint32_t index 
+                                          )
+{
+  
+  glDisableVertexAttribArray( index );
+
+}
+
+// void 
+// GraphicsContext::disableVertexArrayAttrib( 
+//                                           uint32_t vao, 
+//                                           uint32_t index 
+//                                           )
+// {
+  
+//   glDisableVertexArrayAttrib( vao, index );
+
+// }
+
+
+///**********************************************************************************
+///
 ///  \function GraphicsContext::genVertexBuffer
 ///
 ///  \brief    Brief Description
@@ -153,13 +261,13 @@ GraphicsContext::contextCloseRequested()
 void 
 GraphicsContext::genVertexBuffer( 
                                   size_t    n, 
-                                  uint32_t *pVao 
+                                  uint32_t *pVbo 
                                   )
 {
   
-  glGenVertexArrays( n, static_cast< GLuint * >( pVao ) );
+  glGenBuffers( n, static_cast< GLuint * >( pVbo ) );
 
-  bindVertexBuffer( *pVao );
+  bindBuffer( GL_ARRAY_BUFFER, *pVbo );
 
 } // GraphicsContext::genVertexBuffer
 
@@ -175,14 +283,127 @@ GraphicsContext::genVertexBuffer(
 ///
 ///**********************************************************************************
 void
-GraphicsContext::bindVertexBuffer( 
-                                  uint32_t vao 
-                                  )
+GraphicsContext::bindBuffer( 
+                            int32_t  target,
+                            uint32_t buffer 
+                            )
 {
   
-  glBindVertexArray( static_cast< GLuint >( vao ) );
+  glBindBuffer( static_cast< GLenum >( target ), static_cast< GLuint >( buffer ) );
 
 } // GraphicsContext::bindVertexBuffer
+
+
+///**********************************************************************************
+///
+///  \function GraphicsContext::bufferData
+///
+///  \brief    Brief Description
+///
+///  \return   void - 
+///
+///**********************************************************************************
+void 
+GraphicsContext::bufferData(
+                            int32_t       target,
+                            size_t        size,
+                            void         *data,
+                            int32_t       usage
+                            )
+{
+  
+  glBufferData( 
+                static_cast< GLenum >( target ),
+                static_cast< GLsizeiptr >( size ),
+                static_cast< const GLvoid * >( data ),
+                static_cast< GLenum >( usage )
+              );
+
+} // GraphicsContext::bufferData
+
+
+// ///**********************************************************************************
+// ///
+// ///  \function GraphicsContext::bufferData
+// ///
+// ///  \brief    Brief Description
+// ///
+// ///  \return   void - 
+// ///
+// ///**********************************************************************************
+// void 
+// GraphicsContext::bufferData(
+//                             uint32_t      buffer,
+//                             size_t        size,
+//                             void         *data,
+//                             int32_t       usage
+//                             )
+// {
+  
+//   glNamedBufferData( 
+//                     static_cast< GLuint >( buffer ),
+//                     static_cast< GLsizeiptr >( size ),
+//                     static_cast< const GLvoid * >( data ),
+//                     static_cast< GLenum >( usage )
+//                     );
+
+// } // GraphicsContext::bufferData
+
+
+///**********************************************************************************
+///
+///  \function GraphicsContext::bufferSubData
+///
+///  \brief    Brief Description
+///
+///  \return   void - 
+///
+///**********************************************************************************
+void 
+GraphicsContext::bufferSubData(
+                                int32_t       target,
+                                size_t        offset,
+                                size_t        size,
+                                void         *data
+                                )
+{
+  
+  glBufferSubData( 
+                  static_cast< GLenum >( target ),
+                  static_cast< GLintptr >( offset ),
+                  static_cast< GLsizeiptr >( size ),
+                  static_cast< const GLvoid * >( data )
+                  );
+
+} // GraphicsContext::bufferSubData
+
+
+// ///**********************************************************************************
+// ///
+// ///  \function GraphicsContext::bufferSubData
+// ///
+// ///  \brief    Brief Description
+// ///
+// ///  \return   void - 
+// ///
+// ///**********************************************************************************
+// void 
+// GraphicsContext::bufferSubData(
+//                                 uint32_t      buffer,
+//                                 size_t        offset
+//                                 size_t        size,
+//                                 void         *data
+//                                 )
+// {
+  
+//   glNamedBufferData( 
+//                     static_cast< GLuint >( buffer ),
+//                     static_cast< Glintptr >( offset ),
+//                     static_cast< GLsizeiptr >( size ),
+//                     static_cast< const GLvoid * >( data )
+//                     );
+
+// } // GraphicsContext::bufferSubData
 
 
 } // namespace core

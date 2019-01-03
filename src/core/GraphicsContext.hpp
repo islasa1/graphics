@@ -53,11 +53,58 @@ public:
   size_t getWindowWidth()  { return width_;  }
   size_t getWindowHeight() { return height_; }
 
+  void   makeWindowCurrent();
+
   //
   // Graphics abstraction layer
   //
+  static void genVertexArray   ( size_t n, uint32_t *pVao );
+  static void bindVertexArray  ( uint32_t vao );
+
+  
+  static void enableVertexArrayAttrib ( uint32_t index );
+  // static void enableVertexArrayAttrib ( uint32_t vao, uint32_t index );
+  static void disableVertexArrayAttrib( uint32_t index );
+  // static void disableVertexArrayAttrib( uint32_t vao, uint32_t index );
+
+
   static void genVertexBuffer ( size_t n, uint32_t *pVao );
-  static void bindVertexBuffer( uint32_t vao );
+
+  static void bindBuffer( int32_t target, uint32_t buffer );
+
+  static void bufferData( 
+                          int32_t       target,
+                          size_t        size,
+                          void         *data,
+                          int32_t       usage
+                        );
+
+  // Named extensions don't exist until OpenGL 4.5
+  // which is not part of NVIDIA 384.130 drivers
+  // static void bufferData( 
+  //                         uint32_t      buffer,
+  //                         size_t        size,
+  //                         void         *data,
+  //                         int32_t       usage
+  //                       );
+
+  static void bufferSubData( 
+                            int32_t       target,
+                            size_t        offset,
+                            size_t        size,
+                            void         *data
+                          );
+
+
+  // static void bufferSubData( 
+  //                           uint32_t      buffer,
+  //                           size_t        offset,
+  //                           size_t        size,
+  //                           void         *data
+  //                         );
+
+
+  
 
 private:
 
