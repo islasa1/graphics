@@ -12,5 +12,5 @@ should be extensible to other forms of graphics.
 
 ## Requirements
 
-OpenGL 4.5
+OpenGL 4.4 or higher
 OpenGL math library (glm)

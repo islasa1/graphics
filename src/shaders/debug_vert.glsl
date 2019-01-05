@@ -9,29 +9,24 @@
 //                                                                                  //
 //                                                                                  //
 //////////////////////////////////////////////////////////////////////////////////////
-//
-//
-//  File    : config.hpp
-//  Author  : Anthony Islas
-//  Purpose : Configuration values derived from CMake
-//  Group   : None
-//
-//  TODO    : None
-//
-//  License : None
-//
+///
+///
+///  \File    : debug_vert.glsl
+///  \Author  : Anthony Islas
+///  \Purpose : A simple vertex shader
+///  \Group   : Shaders
+///
+///  \todo    : None
+///
+///  \License : GNU GPL v3
+///
 ////////////////////////////////////////////////////////////////////////////////////
+#version 330 core
 
-#ifndef __CONFIG_H__
-#define __CONFIG_H__
+layout( location = 0 ) in vec3 vertexPosition_modelspace;
 
-namespace graphics
-{
-
-const std::string PROJECT_VERSION = "@PROJECT_VERSION@";
-const std::string TEST_RESOURCES  = "@TEST_RESOURCES@";
-const std::string SHADER_PATH     = "@SHADER_PATH@";
-
-} // namespace graphics
-
-#endif
+void main()
+{  
+  gl_Position.xyz = vertexPosition_modelspace;
+  gl_Position.w   = 1.0;
+}

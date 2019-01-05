@@ -38,6 +38,7 @@ target_include_directories( ${TARGET}
 target_sources( ${TARGET}
                 PRIVATE 
                   ${CMAKE_CURRENT_SOURCE_DIR}/GraphicsContext.cpp
+                  ${CMAKE_CURRENT_SOURCE_DIR}/Shader.cpp
               )
 
 

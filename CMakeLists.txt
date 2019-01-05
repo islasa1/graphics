@@ -49,6 +49,8 @@ set   ( COMPONENTS
         "Components directory" 
         )
 
+# Set up our shader path for use
+set( SHADER_PATH "${PROJECT_SOURCE_DIR}/src/shaders" )
 
 #
 # Get our modules after options

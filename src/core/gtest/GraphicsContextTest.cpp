@@ -37,6 +37,12 @@
 #define GLFW_INCLUDE_GLEXT 
 #include "GLFW/glfw3.h"
 
+
+// A context check basically requires everything
+#include "config.hpp"
+#include "core/Shader.hpp"
+
+
 namespace gtest
 {
   
@@ -130,7 +136,7 @@ TEST_F( TEST_CASE, DisplayOnWindowTriangle )
                                               );
 
   // Now draw
-  for ( int32_t i = 0; i < 2; ++i )
+  for ( int32_t i = 0; i < 1; ++i )
   {
     // Clear
     glClear( GL_COLOR_BUFFER_BIT );
@@ -149,7 +155,7 @@ TEST_F( TEST_CASE, DisplayOnWindowTriangle )
                           static_cast< void * >( 0 ) // vbo offset
                           );
 
-    glDrawArrays( GL_TRIANGLES, 0, 3 );
+    graphics::core::GraphicsContext::drawArrays( GL_TRIANGLES, 0, 3 );
 
     // Stop draw
     graphics::core::GraphicsContext::disableVertexArrayAttrib( 0 );
@@ -158,10 +164,89 @@ TEST_F( TEST_CASE, DisplayOnWindowTriangle )
     pContext_->makeWindowCurrent();
 
     sleep( 1 );
+
+  }
+
+}
+
+TEST_F( TEST_CASE, DisplayOnWindowTriangleShader )
+{
+  // Based on :
+  // http://www.opengl-tutorial.org/beginners-tutorials/tutorial-2-the-first-triangle/
+  SetupContext( "Demo Triangle" );
+
+  GLuint vao;
+
+  graphics::core::GraphicsContext::genVertexArray( 1, &vao );
+
+  GLfloat vboData[ 9 ] = 
+  {
+   -1.0f, -1.0f, 0.0f, // bottom left screen
+    1.0f, -1.0f, 0.0f, // bottom right
+    0.0f,  1.0f, 0.0f, // top middle 
+  };
+
+  GLuint vbo;
+
+  graphics::core::GraphicsContext::genVertexBuffer( 1, &vbo );
+
+  graphics::core::GraphicsContext::bufferData( 
+                                              GL_ARRAY_BUFFER, // vbo
+                                              sizeof( vboData ),
+                                              vboData,
+                                              GL_STATIC_DRAW
+                                              );
+
+  // Set shader program
+  graphics::core::Shader shader( 
+                                graphics::SHADER_PATH + "/debug_vert.glsl",
+                                "", // no geom
+                                graphics::SHADER_PATH + "/debug_frag.glsl"
+                                );
+
+  // Set clear color
+  glClearColor( 0.0f, 0.0f, 0.4f, 1.0f );
+
+  shader.loadProgram();
+
+
+  // Now draw
+  for ( int32_t i = 0; i < 2; ++i )
+  {
+    // Clear
+    glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
+    
+    shader.useProgram();
+
+    // Draw operation
+    graphics::core::GraphicsContext::enableVertexArrayAttrib( 0 );
+
+    graphics::core::GraphicsContext::bindBuffer( GL_ARRAY_BUFFER, vbo );
+
+    glVertexAttribPointer(
+                          0,        // attribute 0
+                          3,        // size 
+                          GL_FLOAT, // type
+                          GL_FALSE, // normalized or not
+                          0,        // stride
+                          static_cast< void * >( 0 ) // vbo offset
+                          );
+
+    graphics::core::GraphicsContext::drawArrays( GL_TRIANGLES, 0, 3 );
+
+    // Stop draw
+    graphics::core::GraphicsContext::disableVertexArrayAttrib( 0 );
+
+    // Swap buffer
+    pContext_->makeWindowCurrent();
+
+    sleep( 1 );
+    
   }
 
 
 }
+
 
 
 

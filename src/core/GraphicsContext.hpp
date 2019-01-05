@@ -63,9 +63,7 @@ public:
 
   
   static void enableVertexArrayAttrib ( uint32_t index );
-  // static void enableVertexArrayAttrib ( uint32_t vao, uint32_t index );
   static void disableVertexArrayAttrib( uint32_t index );
-  // static void disableVertexArrayAttrib( uint32_t vao, uint32_t index );
 
 
   static void genVertexBuffer ( size_t n, uint32_t *pVao );
@@ -79,15 +77,6 @@ public:
                           int32_t       usage
                         );
 
-  // Named extensions don't exist until OpenGL 4.5
-  // which is not part of NVIDIA 384.130 drivers
-  // static void bufferData( 
-  //                         uint32_t      buffer,
-  //                         size_t        size,
-  //                         void         *data,
-  //                         int32_t       usage
-  //                       );
-
   static void bufferSubData( 
                             int32_t       target,
                             size_t        offset,
@@ -95,15 +84,30 @@ public:
                             void         *data
                           );
 
+  static void drawArrays( 
+                          int32_t mode,
+                          int32_t first,
+                          size_t  count 
+                          );
 
+  // Named extensions don't exist until OpenGL 4.5
+  // which is not part of NVIDIA 384.130 drivers
+  //
+  // static void enableVertexArrayAttrib ( uint32_t vao, uint32_t index );
+  // static void disableVertexArrayAttrib( uint32_t vao, uint32_t index );
+  //
+  // static void bufferData( 
+  //                         uint32_t      buffer,
+  //                         size_t        size,
+  //                         void         *data,
+  //                         int32_t       usage
+  //                       );
   // static void bufferSubData( 
   //                           uint32_t      buffer,
   //                           size_t        offset,
   //                           size_t        size,
   //                           void         *data
   //                         );
-
-
   
 
 private:

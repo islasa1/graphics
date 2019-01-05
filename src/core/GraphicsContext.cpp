@@ -31,7 +31,6 @@
 
 // gl
 #include <glm/glm.hpp>
-// #include <GL/gl.h>
 
 // thirdparty
 // Gets OpenGL 3.1+ extensions
@@ -320,6 +319,32 @@ GraphicsContext::bufferData(
               );
 
 } // GraphicsContext::bufferData
+
+
+///**********************************************************************************
+///
+///  \function GraphicsContext::drawArrays
+///
+///  \brief    render primitives from array data
+///
+///  \return   void - 
+///
+///**********************************************************************************
+void 
+GraphicsContext::drawArrays(
+                            int32_t mode,
+                            int32_t first,
+                            size_t  count 
+                            )
+{
+  
+  glDrawArrays( 
+                static_cast< GLenum  >( mode ),
+                static_cast< GLint   >( first ),
+                static_cast< GLsizei >( count ) 
+              );
+
+} // GraphicsContext::drawArrays
 
 
 // ///**********************************************************************************
