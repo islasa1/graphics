@@ -150,10 +150,13 @@ Shader::loadProgram( )
   //
   std::cout << "Linking program" << std::endl;
 
-  GLuint programID_ = glCreateProgram();
+  programID_ = glCreateProgram();
 
   glAttachShader( programID_, vertexShaderID );
-  if ( !geom_.empty() ) glAttachShader( programID_, geometryShaderID );
+  if ( !geom_.empty() )
+  {
+    glAttachShader( programID_, geometryShaderID );
+  }
   glAttachShader( programID_, fragmentShaderID );
 
   glLinkProgram( programID_ );
@@ -166,7 +169,7 @@ Shader::loadProgram( )
   glGetProgramiv( programID_, GL_LINK_STATUS,     &result     );
   glGetProgramiv( programID_, GL_INFO_LOG_LENGTH, &infoLength );
 
-  if ( infoLength > 0 )
+  if ( infoLength > 0 || !result )
   {
     //
     std::cerr << "Failed to link program " << std::endl;
@@ -181,11 +184,17 @@ Shader::loadProgram( )
 
   
   glDetachShader( programID_, vertexShaderID );
-  if ( !geom_.empty() ) glDetachShader( programID_, geometryShaderID );
+  if ( !geom_.empty() ) 
+  {
+    glDetachShader( programID_, geometryShaderID );
+  }
   glDetachShader( programID_, fragmentShaderID );
   
   glDeleteShader( vertexShaderID );
-  if ( !geom_.empty() ) glDeleteShader( geometryShaderID );
+  if ( !geom_.empty() ) 
+  {
+    glDeleteShader( geometryShaderID );
+  }
   glDeleteShader( fragmentShaderID );
 
   // Woohoo we did it
@@ -278,7 +287,7 @@ Shader::compileShader(
   glGetShaderiv( shaderID, GL_COMPILE_STATUS,  &result     );
   glGetShaderiv( shaderID, GL_INFO_LOG_LENGTH, &infoLength );
 
-  if ( infoLength > 0 )
+  if ( infoLength > 0 || !result )
   {
     //
     std::cerr << "Failed to compile shader : " << shaderFile << std::endl;

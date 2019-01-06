@@ -26,8 +26,10 @@
 
 #include "core/GraphicsContext.hpp"
 
-// 
-// Direct access to things we test
+// std 
+#include <fstream>
+#include <sstream>
+#include <iostream>
 
 // gl
 #include <glm/glm.hpp>
@@ -59,6 +61,7 @@ public:
   SetUp()
   {
 
+    pContext_ = 0;
 
   }
 
@@ -77,13 +80,49 @@ public:
   void
   SetupContext( std::string windowName = "" )
   {
-    pContext_ = new graphics::core::GraphicsContext( windowName );
+    windowSize_ = 64;
+    displayBuffer_.resize( windowSize_ * windowSize_ * 3, 0.0f );
+
+    pContext_ = new graphics::core::GraphicsContext( windowName, windowSize_, windowSize_ );
+  }
+
+  void getBuffer()
+  {
+    glReadPixels( 
+                  static_cast< GLint    >( 0 ),
+                  static_cast< GLint    >( 0 ),
+                  static_cast< GLsizei  >( windowSize_ ),
+                  static_cast< GLsizei  >( windowSize_ ),
+                  GL_RGB,
+                  GL_FLOAT,
+                  static_cast< GLvoid * >( displayBuffer_.data() )
+                );
+  }
+
+  void dumpBuffer()
+  {
+    std::cout << "RGB : " << std::endl;
+    size_t stride = 3;
+
+    for ( size_t i = 0; i < windowSize_; ++i )
+    {   
+      for ( size_t j = 0; j < windowSize_; ++j )
+      {
+        std::cout << "[ " 
+                  << displayBuffer_[ i * windowSize_ * stride + j * stride + 0 ] << ", "
+                  << displayBuffer_[ i * windowSize_ * stride + j * stride + 1 ] << ", "
+                  << displayBuffer_[ i * windowSize_ * stride + j * stride + 2 ] << "] ";
+      }
+      std::cout << std::endl;
+    }
   }
 
 // I thought tests were part of the class, apparently not
 // private:
 
   graphics::core::GraphicsContext *pContext_;
+  size_t                           windowSize_;
+  std::vector< float > displayBuffer_;
   
 };
 
@@ -176,19 +215,23 @@ TEST_F( TEST_CASE, DisplayOnWindowTriangleShader )
   SetupContext( "Demo Triangle" );
 
   GLuint vao;
+  GLuint vbo;
 
   graphics::core::GraphicsContext::genVertexArray( 1, &vao );
 
   GLfloat vboData[ 9 ] = 
   {
    -1.0f, -1.0f, 0.0f, // bottom left screen
-    1.0f, -1.0f, 0.0f, // bottom right
+    1.0f, -0.5f, 0.0f, // bottom right
     0.0f,  1.0f, 0.0f, // top middle 
   };
 
-  GLuint vbo;
-
   graphics::core::GraphicsContext::genVertexBuffer( 1, &vbo );
+
+
+  // BIND
+  graphics::core::GraphicsContext::bindVertexArray( vao );
+  graphics::core::GraphicsContext::bindBuffer( GL_ARRAY_BUFFER, vbo );
 
   graphics::core::GraphicsContext::bufferData( 
                                               GL_ARRAY_BUFFER, // vbo
@@ -197,6 +240,26 @@ TEST_F( TEST_CASE, DisplayOnWindowTriangleShader )
                                               GL_STATIC_DRAW
                                               );
 
+
+  // graphics::core::GraphicsContext::bindBuffer( GL_ARRAY_BUFFER, vbo );
+  glVertexAttribPointer(
+                        0,        // attribute 0
+                        3,        // size 
+                        GL_FLOAT, // type
+                        GL_FALSE, // normalized or not
+                        3 * sizeof( float ),       // stride
+                        static_cast< void * >( 0 ) // vbo offset
+                        );
+
+  graphics::core::GraphicsContext::enableVertexArrayAttrib( 0 );
+
+  // graphics::core::GraphicsContext::disableVertexArrayAttrib( 0 );
+  
+  // UNBIND
+  graphics::core::GraphicsContext::bindBuffer( GL_ARRAY_BUFFER, 0 );
+  graphics::core::GraphicsContext::bindVertexArray( 0 );
+
+
   // Set shader program
   graphics::core::Shader shader( 
                                 graphics::SHADER_PATH + "/debug_vert.glsl",
@@ -204,39 +267,33 @@ TEST_F( TEST_CASE, DisplayOnWindowTriangleShader )
                                 graphics::SHADER_PATH + "/debug_frag.glsl"
                                 );
 
-  // Set clear color
-  glClearColor( 0.0f, 0.0f, 0.4f, 1.0f );
 
   shader.loadProgram();
 
+  graphics::core::GraphicsContext::checkError( __FILE__, __LINE__ );
 
   // Now draw
   for ( int32_t i = 0; i < 2; ++i )
   {
     // Clear
+
+    // Set clear color
+    glClearColor( 0.1f, 0.0f, 0.4f, 1.0f );
+    // glDisable( GL_CULL_FACE );
     glClear( GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT );
-    
-    shader.useProgram();
 
     // Draw operation
-    graphics::core::GraphicsContext::enableVertexArrayAttrib( 0 );
-
-    graphics::core::GraphicsContext::bindBuffer( GL_ARRAY_BUFFER, vbo );
-
-    glVertexAttribPointer(
-                          0,        // attribute 0
-                          3,        // size 
-                          GL_FLOAT, // type
-                          GL_FALSE, // normalized or not
-                          0,        // stride
-                          static_cast< void * >( 0 ) // vbo offset
-                          );
+    shader.useProgram();
+    
+    // Get states
+    graphics::core::GraphicsContext::bindVertexArray( vao );
 
     graphics::core::GraphicsContext::drawArrays( GL_TRIANGLES, 0, 3 );
 
-    // Stop draw
-    graphics::core::GraphicsContext::disableVertexArrayAttrib( 0 );
-
+    // debug
+    // getBuffer();
+    // dumpBuffer();
+    
     // Swap buffer
     pContext_->makeWindowCurrent();
 
@@ -244,10 +301,8 @@ TEST_F( TEST_CASE, DisplayOnWindowTriangleShader )
     
   }
 
+  graphics::core::GraphicsContext::checkError( __FILE__, __LINE__ );
 
 }
-
-
-
 
 } // namespace gtest

@@ -26,6 +26,7 @@
 
 // std
 #include <iostream>
+#include <iomanip>
 #include <cstdlib>
 #include <stdexcept>
 
@@ -38,6 +39,8 @@
 #define GLFW_INCLUDE_GLEXT 
 #include "GLFW/glfw3.h"
 
+// must be done after glfw / glad bc it's dumb
+#include <GL/glu.h>
 
 namespace graphics
 {
@@ -62,7 +65,6 @@ GraphicsContext::GraphicsContext(
 , height_    ( height      )
 {
 
-
   if ( !glfwInit() )
   {
       std::cerr << "Failed to initialize GLFW" << std::endl;
@@ -77,7 +79,7 @@ GraphicsContext::GraphicsContext(
   
   // Open a window and create its OpenGL context
   
-  window_ = glfwCreateWindow( width_, height_, windowName_.c_str(), NULL, NULL);
+  window_ = glfwCreateWindow( width_, height_, windowName_.c_str(), NULL, NULL );
   
   if( window_ == NULL )
   {
@@ -92,7 +94,11 @@ GraphicsContext::GraphicsContext(
 
   // Load extensions - we need a valid context before
   // we can do this
-  gladLoadGLLoader((GLADloadproc) glfwGetProcAddress);
+  if ( !gladLoadGLLoader( ( GLADloadproc ) glfwGetProcAddress ) )
+  {
+    std::cerr << "Failed to initialize GLAD GL Loader!" << std::endl;
+    throw std::runtime_error( "" );
+  }
 
   if ( !glfwExtensionSupported( "GL_ARB_debug_output" ) )
   {
@@ -158,6 +164,39 @@ GraphicsContext::makeWindowCurrent( )
 } // GraphicsContext::makeWindowCurrent
 
 
+
+///**********************************************************************************
+///
+///  \function GraphicsContext::checkError
+///
+///  \brief    Checks graphics errors
+///
+///  \return   void - throws on error
+///
+///**********************************************************************************
+void 
+GraphicsContext::checkError( 
+                            const char *file, 
+                            uint32_t    line 
+                            )
+{
+  
+  GLenum err = glGetError();
+
+  if ( err != GL_NO_ERROR )
+  {
+
+    std::cerr << "OpengGL error at " << file << ":" << line << std::endl;
+    std::cerr << "err 0x" << std::hex << err << " : " 
+              << gluErrorString( err ) << std::endl;
+
+    throw std::runtime_error( "" );
+
+  }
+
+} // GraphicsContext::checkError
+
+
 ///**********************************************************************************
 ///
 ///  \function GraphicsContext::genVertexArray
@@ -175,8 +214,6 @@ GraphicsContext::genVertexArray(
 {
   
   glGenVertexArrays( n, static_cast< GLuint * >( pVao ) );
-
-  bindVertexArray( *pVao );
 
 } // GraphicsContext::genVertexArray
 
@@ -265,8 +302,6 @@ GraphicsContext::genVertexBuffer(
 {
   
   glGenBuffers( n, static_cast< GLuint * >( pVbo ) );
-
-  bindBuffer( GL_ARRAY_BUFFER, *pVbo );
 
 } // GraphicsContext::genVertexBuffer
 

@@ -21,11 +21,13 @@
 ///  \License : GNU GPL v3
 ///
 ////////////////////////////////////////////////////////////////////////////////////
-#version 330 core
+#version 440
 
-out vec3 color;
+in vec3 dist;
+
+out vec4 fragColor;
 
 void main()
 {
-  color = vec3( 1.0f );
+  fragColor = vec4( dist / 1.5f, 1.0f );
 }

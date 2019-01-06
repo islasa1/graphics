@@ -81,7 +81,7 @@ detailed_print( "PROJECT VERSION" CLR_MAGENTA ${PROJECT_VERSION} CLR_CYAN 14 LEF
 #
 # Flags
 #
-set( CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wextra" )
+set( CMAKE_CXX_FLAGS "-std=c++11 -Wall -Wextra -Wshadow" )
 
 #
 # Debug flags

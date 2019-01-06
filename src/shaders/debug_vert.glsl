@@ -21,12 +21,15 @@
 ///  \License : GNU GPL v3
 ///
 ////////////////////////////////////////////////////////////////////////////////////
-#version 330 core
+#version 440
 
-layout( location = 0 ) in vec3 vertexPosition_modelspace;
+layout( location = 0 ) in vec3 pos;
+
+out vec3 dist;
 
 void main()
 {  
-  gl_Position.xyz = vertexPosition_modelspace;
-  gl_Position.w   = 1.0;
+  gl_Position = vec4( pos, 1.0f );
+
+  dist = vec3( abs( pos.x ), abs( pos.y ), abs( pos.z ) );
 }

@@ -58,6 +58,11 @@ public:
   //
   // Graphics abstraction layer
   //
+  static void checkError( 
+                          const char *file, 
+                          uint32_t    line 
+                          );
+
   static void genVertexArray   ( size_t n, uint32_t *pVao );
   static void bindVertexArray  ( uint32_t vao );
 
